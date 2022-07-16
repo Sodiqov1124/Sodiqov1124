@@ -1,0 +1,81 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include "function_string.c"
+#include "putchar.c"
+//this is my randum function
+void randum(char s[]){
+    srand(time(NULL));
+    for(int i = 0; i < 4; i++){
+        char r = rand() %8 + '0';
+        if(indexx_of(s, r) == 0)
+            s[i] = r;
+    }
+}
+
+//this function checks parametrs right or wrong
+int iss_correct(char *arr){
+    int y = 4;
+    if(my_len(arr) > 4|| my_len(arr) < 4)
+        return 0;
+    for(int i = 0; i <my_len(arr); i++){
+        if(arr[i] > '7' || arr[i] < '0')
+            y = 0;
+        for(int n = 0; n < i; n++){
+            if(arr[i] == arr[n])
+                y = 0;
+        }
+    }if(y)
+        return 1;
+    else 
+        return 0;
+}
+
+
+int main(int argc, char *argv []){
+    int ak,nk,c,t = 0;
+    int atmp = 10;
+    char code[10000];
+    for(int i = 1; i < argc; i++){      //i < argc is using instead of strlen function
+        if(my_strcmp(argv[i], "-c"))
+            c = i + 1;
+        if(my_strcmp(argv[i], "-t")){
+            t = i +1;
+            atmp = atoi(argv[t]);
+        }
+    }if(c == 0)
+        randum(code);
+    else 
+        my_strcpy(code, argv[c]);
+    printf("Will you find the secret code?\n");
+    my_putstr("---\n");
+    for(int i = 0; i < atmp; i++){
+        ak = 0;
+        nk = 0;
+        char input[10000];
+        int corinput;
+        printf("Round %d\n",i);
+        do{
+            corinput = 1;
+            printf(">");
+            scanf("%s",input);
+            if(iss_correct(input) == 0)
+                corinput = 0;
+            if(corinput == 0)
+                printf("Wrong input\n");
+        }while(corinput != 1);
+        for(int i = 0; i < 4; i ++){
+            if(code[i] == input[i])
+                ak++;
+            else if(indexx_of(code, input[i]) != 0 && code[i] != input[i])
+                nk++;
+
+        }
+        if(ak == 4){
+            printf("Congratz! You dit it\n");
+            return 0;}
+        else{
+            printf("Well placed pieces %d\n",ak);
+            printf("Misplaced pieces %d\n",nk);
+    }
+}   
